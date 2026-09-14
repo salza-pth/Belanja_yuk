@@ -398,5 +398,3 @@ The separation between the Backend and WebClient allows each component to be dev
 **Project Status: Completed**
 
 The core Buyer e-commerce flow has been implemented and tested end-to-end.
-
-Selesai itu README GitHub-mu sudah English juga. 👍
