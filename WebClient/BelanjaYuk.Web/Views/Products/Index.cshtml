@@ -1,0 +1,184 @@
+@model List<BelanjaYuk.Web.Models.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Products";
+
+    var categories = ViewBag.Categories
+        as List<BelanjaYuk.Web.Models.CategoryViewModel>
+        ?? new List<BelanjaYuk.Web.Models.CategoryViewModel>();
+}
+
+<div class="container mt-4 mb-5">
+
+    <!-- HEADER -->
+    <div class="mb-4">
+        <h1 class="fw-bold">Produk BelanjaYuk</h1>
+
+        <p class="text-muted">
+            Temukan berbagai produk dari seller terbaik.
+        </p>
+    </div>
+
+    <!-- CATEGORY FILTER -->
+    <div class="mb-4">
+
+        <h6 class="fw-bold mb-2">
+            Kategori
+        </h6>
+
+        <div class="d-flex flex-wrap gap-2">
+
+            <a asp-controller="Products"
+               asp-action="Index"
+               class="btn @(string.IsNullOrEmpty(ViewBag.Category) ? "btn-primary" : "btn-outline-primary")">
+                Semua
+            </a>
+
+            @foreach (var categoryItem in categories)
+            {
+                <a asp-controller="Products"
+                   asp-action="Index"
+                   asp-route-category="@categoryItem.IdCategory"
+                   class="btn @(ViewBag.Category == categoryItem.IdCategory ? "btn-primary" : "btn-outline-primary")">
+                    @categoryItem.CategoryName
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- ERROR -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.Error
+        </div>
+    }
+
+    <!-- SUCCESS -->
+    @if (TempData["CartSuccess"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["CartSuccess"]
+        </div>
+    }
+
+    @if (TempData["CartError"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["CartError"]
+        </div>
+    }
+
+    <!-- PRODUCT LIST -->
+    <div class="row">
+
+        @foreach (var product in Model.Where(x => x.IsActive == true))
+        {
+            var finalPrice = product.Price - (product.Discount ?? 0);
+
+            var categoryName = categories
+                .FirstOrDefault(x => x.IdCategory == product.IdCategory)
+                ?.CategoryName;
+
+            <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+
+                <div class="card h-100 shadow-sm border-0">
+
+                    <div class="card-body d-flex flex-column">
+
+                        <!-- CATEGORY -->
+                        <div class="mb-2">
+
+                            <span class="badge bg-light text-dark border">
+                                @(categoryName ?? product.IdCategory)
+                            </span>
+
+                        </div>
+
+                        <!-- PRODUCT NAME -->
+                        <h5 class="card-title fw-bold">
+                            @product.ProductName
+                        </h5>
+
+                        <!-- DESCRIPTION -->
+                        <p class="card-text text-muted small">
+                            @product.ProductDesc
+                        </p>
+
+                        <!-- PRICE -->
+                        <div class="mt-auto">
+
+                            @if (product.Discount > 0)
+                            {
+                                <div>
+                                    <small class="text-muted text-decoration-line-through">
+                                        Rp @product.Price.ToString("N0")
+                                    </small>
+                                </div>
+
+                                <div class="fw-bold fs-5 text-primary">
+                                    Rp @finalPrice.ToString("N0")
+                                </div>
+
+                                <span class="badge bg-danger mt-1">
+                                    Diskon Rp @product.Discount?.ToString("N0")
+                                </span>
+                            }
+                            else
+                            {
+                                <div class="fw-bold fs-5 text-primary">
+                                    Rp @product.Price.ToString("N0")
+                                </div>
+                            }
+
+                        </div>
+
+                        <!-- ADD TO CART -->
+                        <form asp-controller="Cart"
+                              asp-action="Add"
+                              method="post"
+                              class="mt-3">
+
+                            <input type="hidden"
+                                   name="idProduct"
+                                   value="@product.IdProduct" />
+
+                            <input type="hidden"
+                                   name="qty"
+                                   value="1" />
+
+                            <button type="submit"
+                                    class="btn btn-primary w-100">
+                                Tambah ke Cart
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+    <!-- EMPTY STATE -->
+    @if (!Model.Any(x => x.IsActive == true))
+    {
+        <div class="text-center py-5">
+
+            <h5 class="text-muted">
+                Belum ada produk tersedia.
+            </h5>
+
+            <p class="text-muted">
+                Silakan coba lagi nanti.
+            </p>
+
+        </div>
+    }
+
+</div>

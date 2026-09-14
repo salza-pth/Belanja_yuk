@@ -1,0 +1,65 @@
+@model List<BelanjaYuk.Web.Models.CategoryViewModel>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="container mt-4">
+
+    <div class="mb-4">
+        <h1>Kategori Produk</h1>
+        <p class="text-muted">
+            Pilih kategori untuk melihat produk yang tersedia.
+        </p>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <div class="row">
+
+        @foreach (var category in Model)
+        {
+            <div class="col-md-4 col-lg-3 mb-4">
+
+                <a asp-controller="Products"
+                 asp-action="Index"
+                 asp-route-category="@category.IdCategory"
+                 class="text-decoration-none text-dark">
+
+                <div class="card h-100 shadow-sm">
+
+                    <div class="card-body">
+
+                        <span class="badge bg-secondary mb-2">
+                            @category.IdCategory
+                        </span>
+
+                        <h5 class="card-title">
+                            @category.CategoryName
+                        </h5>
+
+                        <p class="card-text text-muted">
+                            @category.CategoryDesc
+                        </p>
+
+                        <span class="btn btn-outline-primary mt-2">
+                            Lihat Produk
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

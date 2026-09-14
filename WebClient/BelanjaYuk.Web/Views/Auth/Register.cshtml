@@ -1,0 +1,230 @@
+@model BelanjaYuk.Web.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+
+        <div class="card shadow-sm border-0 mt-4 mb-5">
+            <div class="card-body p-4 p-md-5">
+
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Create Account</h2>
+                    <p class="text-muted">
+                        Register untuk mulai menggunakan BelanjaYuk
+                    </p>
+                </div>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewBag.Error
+                    </div>
+                }
+
+                <form asp-controller="Auth"
+                      asp-action="Register"
+                      method="post">
+
+                    <!-- USERNAME -->
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label">
+                            Username
+                        </label>
+
+                        <input asp-for="UserName"
+                               class="form-control"
+                               placeholder="Masukkan username" />
+
+                        <span asp-validation-for="UserName"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- EMAIL -->
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">
+                            Email
+                        </label>
+
+                        <input asp-for="Email"
+                               type="email"
+                               class="form-control"
+                               placeholder="contoh@email.com" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- NOMOR HP -->
+                    <div class="mb-3">
+                        <label asp-for="PhoneNumber" class="form-label">
+                            Nomor HP
+                        </label>
+
+                        <input asp-for="PhoneNumber"
+                               type="tel"
+                               class="form-control"
+                               placeholder="08xxxxxxxxxx" />
+
+                        <span asp-validation-for="PhoneNumber"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- FIRST NAME & LAST NAME -->
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FirstName" class="form-label">
+                                First Name
+                            </label>
+
+                            <input asp-for="FirstName"
+                                   class="form-control"
+                                   placeholder="Nama depan" />
+
+                            <span asp-validation-for="FirstName"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="LastName" class="form-label">
+                                Last Name
+                            </label>
+
+                            <input asp-for="LastName"
+                                   class="form-control"
+                                   placeholder="Nama belakang" />
+
+                            <span asp-validation-for="LastName"
+                                  class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    <!-- DATE OF BIRTH -->
+                    <div class="mb-3">
+                        <label asp-for="DOB" class="form-label">
+                            Tanggal Lahir
+                        </label>
+
+                        <input asp-for="DOB"
+                               class="form-control"
+                               placeholder="DD/MM/YYYY"
+                               maxlength="10"
+                               autocomplete="off" />
+
+                        <small class="text-muted">
+                            Contoh: 12/05/1996
+                        </small>
+
+                        <span asp-validation-for="DOB"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- GENDER -->
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Gender
+                        </label>
+
+                        <div class="d-flex gap-4">
+
+                            <div class="form-check">
+                                <input asp-for="IdGender"
+                                       class="form-check-input"
+                                       type="radio"
+                                       value="GEN001"
+                                       id="genderMale" />
+
+                                <label class="form-check-label"
+                                       for="genderMale">
+                                    Laki-Laki
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input asp-for="IdGender"
+                                       class="form-check-input"
+                                       type="radio"
+                                       value="GEN002"
+                                       id="genderFemale" />
+
+                                <label class="form-check-label"
+                                       for="genderFemale">
+                                    Perempuan
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <span asp-validation-for="IdGender"
+                              class="text-danger"></span>
+
+                    </div>
+
+                    <!-- PASSWORD -->
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">
+                            Password
+                        </label>
+
+                        <input asp-for="Password"
+                               type="password"
+                               class="form-control"
+                               placeholder="Masukkan password" />
+
+                        <span asp-validation-for="Password"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- CONFIRM PASSWORD -->
+                    <div class="mb-4">
+                        <label asp-for="ConfirmPassword" class="form-label">
+                            Confirm Password
+                        </label>
+
+                        <input asp-for="ConfirmPassword"
+                               type="password"
+                               class="form-control"
+                               placeholder="Ulangi password" />
+
+                        <span asp-validation-for="ConfirmPassword"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- REGISTER BUTTON -->
+                    <button type="submit"
+                            class="btn btn-primary w-100">
+                        Register
+                    </button>
+
+                </form>
+
+                <div class="text-center mt-4">
+
+                    <span class="text-muted">
+                        Sudah punya akun?
+                    </span>
+
+                    <a asp-controller="Auth"
+                       asp-action="Login"
+                       class="text-decoration-none">
+                        Login
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,66 @@
+@model BelanjaYuk.Web.Models.ProductViewModel
+
+@{
+    ViewData["Title"] = "Detail Produk";
+
+    var finalPrice = Model.Price - (Model.Discount ?? 0);
+}
+
+<div class="container mt-4">
+
+    <div class="mb-4">
+        <a asp-controller="Products"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            ← Kembali ke Produk
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body p-4">
+
+            <span class="badge bg-secondary mb-3">
+                @Model.IdCategory
+            </span>
+
+            <h1 class="mb-3">
+                @Model.ProductName
+            </h1>
+
+            <p class="text-muted">
+                @Model.ProductDesc
+            </p>
+
+            <hr />
+
+            @if (Model.Discount > 0)
+            {
+                <p class="mb-1 text-muted">
+                    Harga asli:
+                    <span class="text-decoration-line-through">
+                        Rp @Model.Price.ToString("N0")
+                    </span>
+                </p>
+
+                <p class="mb-1">
+                    Diskon:
+                    <strong>
+                        Rp @Model.Discount?.ToString("N0")
+                    </strong>
+                </p>
+            }
+
+            <h2 class="text-primary mt-3">
+                Rp @finalPrice.ToString("N0")
+            </h2>
+
+            <p class="text-muted mt-3">
+                ID Produk: @Model.IdProduct
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

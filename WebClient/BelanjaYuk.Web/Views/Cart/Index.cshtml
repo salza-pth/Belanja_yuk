@@ -1,0 +1,242 @@
+@model List<BelanjaYuk.Web.Models.CartViewModel>
+
+@{
+    ViewData["Title"] = "Cart";
+
+    var payments = ViewBag.Payments
+        as List<BelanjaYuk.Web.Models.PaymentViewModel>
+        ?? new List<BelanjaYuk.Web.Models.PaymentViewModel>();
+
+    decimal total = 0;
+}
+
+<div class="container mt-4 mb-5">
+
+    <div class="mb-4">
+        <h1 class="fw-bold">Shopping Cart</h1>
+
+        <p class="text-muted">
+            Produk yang ingin kamu beli.
+        </p>
+    </div>
+
+    @if (TempData["CartSuccess"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["CartSuccess"]
+        </div>
+    }
+
+    @if (TempData["CartError"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["CartError"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+
+            <h4 class="text-muted">
+                Cart kamu masih kosong.
+            </h4>
+
+            <p class="text-muted">
+                Yuk cari produk yang ingin kamu beli.
+            </p>
+
+            <a asp-controller="Products"
+               asp-action="Index"
+               class="btn btn-primary">
+                Belanja Sekarang
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            <!-- CART ITEMS -->
+            <div class="col-lg-8">
+
+                @foreach (var item in Model)
+                {
+                    var discount = item.Discount ?? 0;
+                    var finalPrice = item.Price - discount;
+                    var qty = item.Qty ?? 0;
+                    var subtotal = finalPrice * qty;
+
+                    total += subtotal;
+
+                    <div class="card shadow-sm border-0 mb-3">
+
+                        <div class="card-body">
+
+                            <div class="row align-items-center">
+
+                                <div class="col-md-5">
+
+                                    <h5 class="fw-bold mb-1">
+                                        @item.ProductName
+                                    </h5>
+
+                                    @if (discount > 0)
+                                    {
+                                        <small class="text-muted">
+                                            <span class="text-decoration-line-through">
+                                                Rp @item.Price.ToString("N0")
+                                            </span>
+                                            <br />
+                                            Rp @finalPrice.ToString("N0")
+                                        </small>
+                                    }
+                                    else
+                                    {
+                                        <small class="text-muted">
+                                            Rp @finalPrice.ToString("N0")
+                                        </small>
+                                    }
+
+                                </div>
+
+                                <!-- QUANTITY -->
+                                <div class="col-md-3 mt-3 mt-md-0">
+
+                                    <form asp-controller="Cart"
+                                          asp-action="Update"
+                                          method="post"
+                                          class="d-flex gap-2">
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.IdBuyerCart" />
+
+                                        <input type="number"
+                                               name="qty"
+                                               value="@qty"
+                                               min="1"
+                                               class="form-control"
+                                               style="width: 80px;" />
+
+                                        <button type="submit"
+                                                class="btn btn-outline-primary">
+                                            Update
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                                <!-- SUBTOTAL -->
+                                <div class="col-md-2 mt-3 mt-md-0">
+
+                                    <strong>
+                                        Rp @subtotal.ToString("N0")
+                                    </strong>
+
+                                </div>
+
+                                <!-- DELETE -->
+                                <div class="col-md-2 mt-3 mt-md-0 text-md-end">
+
+                                    <form asp-controller="Cart"
+                                          asp-action="Delete"
+                                          method="post">
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.IdBuyerCart" />
+
+                                        <button type="submit"
+                                                class="btn btn-outline-danger">
+                                            Hapus
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+            <!-- CHECKOUT -->
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body">
+
+                        <h5 class="fw-bold mb-4">
+                            Ringkasan Belanja
+                        </h5>
+
+                        <div class="d-flex justify-content-between mb-4">
+
+                            <span>
+                                Total
+                            </span>
+
+                            <strong class="fs-5 text-primary">
+                                Rp @total.ToString("N0")
+                            </strong>
+
+                        </div>
+
+                        <hr />
+
+                        <form asp-controller="Cart"
+                              asp-action="Checkout"
+                              method="post">
+
+                            <div class="mb-3">
+
+                                <label class="form-label fw-bold">
+                                    Metode Pembayaran
+                                </label>
+
+                                @foreach (var payment in payments)
+                                {
+                                    <div class="form-check mb-2">
+
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               name="idPayment"
+                                               value="@payment.IdPayment"
+                                               id="@payment.IdPayment"
+                                               required />
+
+                                        <label class="form-check-label"
+                                               for="@payment.IdPayment">
+                                            @payment.PaymentName
+                                        </label>
+
+                                    </div>
+                                }
+
+                            </div>
+
+                            <button type="submit"
+                                    class="btn btn-primary w-100">
+                                Checkout
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

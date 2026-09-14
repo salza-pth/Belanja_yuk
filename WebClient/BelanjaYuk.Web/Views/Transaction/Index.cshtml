@@ -1,0 +1,179 @@
+@model List<BelanjaYuk.Web.Models.TransactionViewModel>
+
+@{
+    ViewData["Title"] = "Transaction History";
+}
+
+<div class="container mt-4 mb-5">
+
+    <!-- HEADER -->
+    <div class="mb-4">
+        <h1 class="fw-bold">
+            Riwayat Transaksi
+        </h1>
+
+        <p class="text-muted">
+            Lihat semua transaksi yang pernah kamu lakukan.
+        </p>
+    </div>
+
+    <!-- SUCCESS -->
+    @if (TempData["CheckoutSuccess"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["CheckoutSuccess"]
+        </div>
+    }
+
+    <!-- ERROR -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <!-- EMPTY -->
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+
+            <h5 class="text-muted">
+                Belum ada transaksi.
+            </h5>
+
+            <p class="text-muted">
+                Yuk mulai belanja di BelanjaYuk.
+            </p>
+
+            <a asp-controller="Products"
+               asp-action="Index"
+               class="btn btn-primary">
+                Belanja Sekarang
+            </a>
+
+        </div>
+    }
+    else
+    {
+        @foreach (var transaction in Model)
+        {
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-body p-4">
+
+                    <!-- TRANSACTION HEADER -->
+                    <div class="row mb-3">
+
+                        <div class="col-md-8">
+
+                            <h5 class="fw-bold mb-1">
+                                @transaction.IdBuyerTransaction
+                            </h5>
+
+                            <small class="text-muted">
+                                @transaction.DateIn?.ToString(
+                                    "dd/MM/yyyy HH:mm")
+                            </small>
+
+                        </div>
+
+                        <div class="col-md-4 text-md-end mt-2 mt-md-0">
+
+                            <span class="badge bg-success">
+                                Berhasil
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <!-- PAYMENT -->
+                    <div class="mb-4">
+
+                        <div class="text-muted small">
+                            Metode Pembayaran
+                        </div>
+
+                        <div class="fw-bold">
+                            @transaction.PaymentName
+                        </div>
+
+                    </div>
+
+                    <!-- PRODUCTS -->
+                    <div class="mb-4">
+
+                        <h6 class="fw-bold mb-3">
+                            Produk
+                        </h6>
+
+                        @foreach (var detail in transaction.Details)
+                        {
+                            <div class="border rounded p-3 mb-2">
+
+                                <div class="row align-items-center">
+
+                                    <div class="col-md-6">
+
+                                        <div class="fw-bold">
+                                            @detail.ProductName
+                                        </div>
+
+                                        <small class="text-muted">
+                                            @detail.Qty ×
+                                            Rp @detail.Price.ToString("N0")
+                                        </small>
+
+                                        @if (detail.Discount > 0)
+                                        {
+                                            <div>
+                                                <small class="text-success">
+                                                    Diskon Rp
+                                                    @detail.Discount.ToString("N0")
+                                                </small>
+                                            </div>
+                                        }
+
+                                    </div>
+
+                                    <div class="col-md-6 text-md-end mt-2 mt-md-0">
+
+                                        <div class="fw-bold">
+                                            Rp @detail.Subtotal.ToString("N0")
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                    <hr />
+
+                    <!-- TOTAL -->
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <span class="fw-bold">
+                            Total Pembayaran
+                        </span>
+
+                        <span class="fw-bold fs-5 text-primary">
+                            Rp @((transaction.FinalPrice ?? 0)
+                                .ToString("N0"))
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+    }
+
+</div>

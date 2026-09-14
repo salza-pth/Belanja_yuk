@@ -1,0 +1,86 @@
+@model BelanjaYuk.Web.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <h2 class="text-center mb-2">Login</h2>
+
+                    <p class="text-center text-muted mb-4">
+                        Login ke akun BelanjaYuk kamu
+                    </p>
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                    <form asp-action="Login" method="post">
+
+                        <div class="mb-3">
+                            <label asp-for="EmailOrPhone" class="form-label">
+                                Email atau Nomor HP
+                            </label>
+
+                            <input asp-for="EmailOrPhone"
+                                   class="form-control"
+                                   placeholder="Masukkan email atau nomor HP" />
+
+                            <span asp-validation-for="EmailOrPhone"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">
+                                Password
+                            </label>
+
+                            <input asp-for="Password"
+                                   type="password"
+                                   class="form-control"
+                                   placeholder="Masukkan password" />
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            Login
+                        </button>
+
+                    </form>
+
+                    <div class="text-center mt-4">
+
+                        <span class="text-muted">
+                            Belum punya akun?
+                        </span>
+
+                        <a asp-controller="Auth"
+                           asp-action="Register"
+                           class="text-decoration-none">
+                            Register
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

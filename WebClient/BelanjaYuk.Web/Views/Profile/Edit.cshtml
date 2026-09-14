@@ -1,0 +1,180 @@
+@model BelanjaYuk.Web.Models.ProfileUpdateViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container mt-4 mb-5">
+
+    <div class="mb-4">
+        <h1 class="fw-bold">
+            Edit Profile
+        </h1>
+
+        <p class="text-muted">
+            Perbarui informasi akun kamu.
+        </p>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form asp-controller="Profile"
+                  asp-action="Edit"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+
+                    <!-- USERNAME -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="UserName"
+                               class="form-label fw-bold">
+                            Username
+                        </label>
+
+                        <input asp-for="UserName"
+                               class="form-control" />
+
+                    </div>
+
+                    <!-- EMAIL -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Email"
+                               class="form-label fw-bold">
+                            Email
+                        </label>
+
+                        <input asp-for="Email"
+                               type="email"
+                               class="form-control" />
+
+                    </div>
+
+                    <!-- PHONE -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="PhoneNumber"
+                               class="form-label fw-bold">
+                            Nomor Telepon
+                        </label>
+
+                        <input asp-for="PhoneNumber"
+                               class="form-control" />
+
+                    </div>
+
+                    <!-- FIRST NAME -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="FirstName"
+                               class="form-label fw-bold">
+                            Nama Depan
+                        </label>
+
+                        <input asp-for="FirstName"
+                               class="form-control" />
+
+                    </div>
+
+                    <!-- LAST NAME -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="LastName"
+                               class="form-label fw-bold">
+                            Nama Belakang
+                        </label>
+
+                        <input asp-for="LastName"
+                               class="form-control" />
+
+                    </div>
+
+                    <!-- DOB -->
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="DOB"
+                               class="form-label fw-bold">
+                            Tanggal Lahir
+                        </label>
+
+                        <input asp-for="DOB"
+                               type="date"
+                               class="form-control" />
+
+                    </div>
+
+                    <!-- GENDER -->
+                    <div class="col-12 mb-4">
+
+                        <label class="form-label fw-bold">
+                            Gender
+                        </label>
+
+                        <div>
+
+                            <div class="form-check form-check-inline">
+
+                                <input asp-for="IdGender"
+                                       class="form-check-input"
+                                       type="radio"
+                                       value="GEN001" />
+
+                                <label class="form-check-label">
+                                    Laki-Laki
+                                </label>
+
+                            </div>
+
+                            <div class="form-check form-check-inline">
+
+                                <input asp-for="IdGender"
+                                       class="form-check-input"
+                                       type="radio"
+                                       value="GEN002" />
+
+                                <label class="form-check-label">
+                                    Perempuan
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Simpan Perubahan
+                    </button>
+
+                    <a asp-controller="Profile"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Batal
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
